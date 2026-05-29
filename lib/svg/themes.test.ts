@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { themes, AUTO_THEME_LIGHT, AUTO_THEME_DARK } from './themes';
 
+const HEX_REGEX = /^[0-9a-f]{6}$/i;
+
 describe('themes', () => {
   it('should not use # prefix in background colors', () => {
     Object.values(themes).forEach((theme) => {
@@ -19,6 +21,7 @@ describe('themes', () => {
       expect(theme.accent.startsWith('#')).toBe(false);
     });
   });
+
   it('AUTO_THEME_LIGHT references themes.light', () => {
     expect(AUTO_THEME_LIGHT).toBe(themes.light);
   });
@@ -33,5 +36,25 @@ describe('themes', () => {
 
   it('AUTO_THEME_DARK accent matches themes.dark.accent', () => {
     expect(AUTO_THEME_DARK.accent).toBe(themes.dark.accent);
+  });
+
+  it('should have valid 6-char hex bg colors', () => {
+    Object.entries(themes).forEach(([name, theme]) => {
+      expect(theme.bg, `theme "${name}": bg must match /^[0-9a-f]{6}$/i`).toMatch(HEX_REGEX);
+    });
+  });
+
+  it('should have valid 6-char hex text colors', () => {
+    Object.entries(themes).forEach(([name, theme]) => {
+      expect(theme.text, `theme "${name}": text must match /^[0-9a-f]{6}$/i`).toMatch(HEX_REGEX);
+    });
+  });
+
+  it('should have valid 6-char hex accent colors', () => {
+    Object.entries(themes).forEach(([name, theme]) => {
+      expect(theme.accent, `theme "${name}": accent must match /^[0-9a-f]{6}$/i`).toMatch(
+        HEX_REGEX
+      );
+    });
   });
 });
